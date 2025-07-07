@@ -3,5 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/facturacion-ada/", // 👈 cambia por tu repo
+  base: "/control-cursada/", // 👈 cambia por tu repo
 });
