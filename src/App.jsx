@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CssBaseline,
   IconButton,
@@ -16,7 +16,7 @@ import { getCourses, saveCourses, resetCourses } from "./utils/storage";
 
 export default function App() {
   const [courses, setCourses] = useState(getCourses());
-  const [activeCourses, setActiveCourses] = useState([]);
+  const [activeCourses, setActiveCourses] = useState([]); // Empieza vacío
   const [darkMode, setDarkMode] = useState(false);
 
   const theme = createTheme({
@@ -37,6 +37,14 @@ export default function App() {
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
+  // 🆕 Sincronizar cursos activos al cargar y cuando cambien
+  useEffect(() => {
+    const active = Object.keys(courses).filter(
+      (name) => courses[name].days > 0
+    );
+    setActiveCourses(active);
+  }, [courses]);
+
   const handleAddCourse = (courseName) => {
     if (!activeCourses.includes(courseName)) {
       setActiveCourses([...activeCourses, courseName]);
@@ -46,7 +54,7 @@ export default function App() {
   const handleAddClass = (courseName) => {
     const updated = { ...courses };
     updated[courseName].days += 1;
-    updated[courseName].hours += 3;
+    updated[courseName].hours = updated[courseName].days * 3;
     setCourses(updated);
     saveCourses(updated);
   };
@@ -55,14 +63,13 @@ export default function App() {
     const updated = { ...courses };
     if (updated[courseName].days > 0) {
       updated[courseName].days -= 1;
-      updated[courseName].hours -= 3;
+      updated[courseName].hours = updated[courseName].days * 3;
+      setCourses(updated);
+      saveCourses(updated);
     }
-    setCourses(updated);
-    saveCourses(updated);
   };
 
   const handleDeleteCourse = (courseName) => {
-    setActiveCourses(activeCourses.filter((name) => name !== courseName));
     const updated = { ...courses };
     updated[courseName].days = 0;
     updated[courseName].hours = 0;
@@ -71,7 +78,8 @@ export default function App() {
   };
 
   const handleReset = () => {
-    setCourses(resetCourses());
+    const resetData = resetCourses();
+    setCourses(resetData);
     setActiveCourses([]);
   };
 
@@ -82,8 +90,8 @@ export default function App() {
         sx={{
           minHeight: "100vh",
           background: darkMode
-            ? "linear-gradient(135deg, #2c003e, #0b002c)" // Modo oscuro
-            : "linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea)", // Modo claro
+            ? "linear-gradient(135deg, #2c003e, #0b002c)"
+            : "linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -143,8 +151,8 @@ export default function App() {
                 onClick={handleReset}
                 sx={{
                   background: darkMode
-                    ? "linear-gradient(135deg,rgb(2, 17, 61),rgb(52, 106, 176))" // Modo oscuro: Violeta degradado
-                    : "radial-gradient(circle, #4fc3f7, #0288d1)", // Modo claro: Azul glossy
+                    ? "linear-gradient(135deg,rgb(2, 17, 61),rgb(52, 106, 176))"
+                    : "linear-gradient(135deg, #3a6ee5, #2f62cf, #2457ba, #194ba5, #0d4090)",
                   color: "#ffffff",
                   fontWeight: "bold",
                   fontSize: "1rem",
@@ -156,8 +164,8 @@ export default function App() {
                   transition: "all 0.3s ease",
                   "&:hover": {
                     background: darkMode
-                      ? "linear-gradient(135deg,rgb(105, 10, 6),rgb(238, 69, 69))" // Hover violeta
-                      : "radial-gradient(circle,rgb(228, 20, 20),rgb(239, 115, 115))", // Hover azul brillante
+                      ? "linear-gradient(135deg,rgb(105, 10, 6),rgb(238, 69, 69))"
+                      : "linear-gradient(135deg, #a81717, #bd2423, #d3302f, #e93c3b, #ff4848);)",
                     transform: "scale(1.05)",
                     boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
                   },
