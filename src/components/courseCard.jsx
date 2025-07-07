@@ -3,9 +3,9 @@ import { Card, CardContent, Typography, Box, Avatar, IconButton } from "@mui/mat
 import { Add, Remove, Delete } from "@mui/icons-material";
 
 const courseImages = {
-    JavaScript: "/javascript.png",
-    Python: "/python.png",
-    "HTML + CSS": "/html_css.png",
+    JavaScript: `${import.meta.env.BASE_URL}javascript.png`,
+    Python: `${import.meta.env.BASE_URL}python.png`,
+    "HTML + CSS": `${import.meta.env.BASE_URL}html_css.png`,
 };
 
 export default function CourseCard({
