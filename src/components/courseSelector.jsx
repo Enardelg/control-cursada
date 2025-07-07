@@ -12,15 +12,15 @@ import {
 const courses = [
     {
         name: "JavaScript",
-        image: "public/javascript.png", // Coloca aquí la ruta de la imagen
+        image: "/javascript.png", // Coloca aquí la ruta de la imagen
     },
     {
         name: "Python",
-        image: "public/python.png",
+        image: "/python.png",
     },
     {
         name: "HTML + CSS",
-        image: "public/html_css.png",
+        image: "/html_css.png",
     },
 ];
 
